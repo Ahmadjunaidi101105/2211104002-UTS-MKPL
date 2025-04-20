@@ -52,54 +52,22 @@ public class Employee {
 	 * Jika pegawai adalah warga negara asing gaji bulanan diperbesar sebanyak 50%
 	 */
 	
-	public void setMonthlySalary(int grade) {	
-		if (grade == 1) {
-			monthlySalary = 3000000;
-			if (isForeigner) {
-				monthlySalary = (int) (3000000 * 1.5);
-			}
-		}else if (grade == 2) {
-			monthlySalary = 5000000;
-			if (isForeigner) {
-				monthlySalary = (int) (3000000 * 1.5);
-			}
-		}else if (grade == 3) {
-			monthlySalary = 7000000;
-			if (isForeigner) {
-				monthlySalary = (int) (3000000 * 1.5);
-			}
+	 //Refactor method setMonthlySalary() 
+	 private int getBaseSalaryByGrade(int grade) {
+		switch (grade) {
+			case 1: return 3000000;
+			case 2: return 5000000;
+			case 3: return 7000000;
+			default: return 0;
 		}
 	}
 	
-	public void setAnnualDeductible(int deductible) {	
-		this.annualDeductible = deductible;
-	}
-	
-	public void setAdditionalIncome(int income) {	
-		this.otherMonthlyIncome = income;
-	}
-	
-	public void setSpouse(String spouseName, String spouseIdNumber) {
-		this.spouseName = spouseName;
-		this.spouseIdNumber = idNumber;
-	}
-	
-	public void addChild(String childName, String childIdNumber) {
-		childNames.add(childName);
-		childIdNumbers.add(childIdNumber);
-	}
-	
-	public int getAnnualIncomeTax() {
-		
-		//Menghitung berapa lama pegawai bekerja dalam setahun ini, jika pegawai sudah bekerja dari tahun sebelumnya maka otomatis dianggap 12 bulan.
-		LocalDate date = LocalDate.now();
-		
-		if (date.getYear() == yearJoined) {
-			monthWorkingInYear = date.getMonthValue() - monthJoined;
-		}else {
-			monthWorkingInYear = 12;
+	// Menyederhanakan method setMonthlySalary
+	public void setMonthlySalary(int grade) {
+		int baseSalary = getBaseSalaryByGrade(grade);
+		if (isForeigner) {
+			baseSalary *= 1.5;
 		}
-		
-		return TaxFunction.calculateTax(monthlySalary, otherMonthlyIncome, monthWorkingInYear, annualDeductible, spouseIdNumber.equals(""), childIdNumbers.size());
+		this.monthlySalary = baseSalary;
 	}
 }
